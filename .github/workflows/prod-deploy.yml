@@ -8,6 +8,7 @@ on:
 jobs:
   deploy-prod:
     runs-on: ubuntu-latest
+    environment: prod
 
     steps:
       - name: Checkout repository
@@ -16,11 +17,12 @@ jobs:
       - name: Install Databricks CLI
         uses: databricks/setup-cli@main
 
-      - name: Authenticate to Databricks (Prod)
+      - name: Authenticate to Databricks
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_WORKSPACE }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
         run: |
-          databricks auth login \
-            --host ${{ secrets.DATABRICKS_WORKSPACE }} \
-            --token ${{ secrets.DATABRICKS_TOKEN }}
+          databricks auth status
 
       - name: Validate Databricks Bundle
         run: |
