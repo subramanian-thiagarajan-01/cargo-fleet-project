@@ -10,6 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     environment: prod
 
+    env:
+      DATABRICKS_HOST: ${{ secrets.DATABRICKS_WORKSPACE }}
+      DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -18,9 +22,6 @@ jobs:
         uses: databricks/setup-cli@main
 
       - name: Authenticate to Databricks
-        env:
-          DATABRICKS_HOST: ${{ secrets.DATABRICKS_WORKSPACE }}
-          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
         run: |
           databricks auth status
 
