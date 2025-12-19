@@ -1,0 +1,38 @@
+name: Deploy Databricks Bundle to Prod
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy-prod:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Databricks CLI
+        uses: databricks/setup-cli@main
+
+      - name: Authenticate to Databricks (Prod)
+        run: |
+          databricks auth login \
+            --host ${{ secrets.DATABRICKS_WORKSPACE }} \
+            --token ${{ secrets.DATABRICKS_TOKEN }}
+
+      - name: Validate Databricks Bundle
+        run: |
+          databricks bundle validate --target prod
+
+      - name: Deploy Databricks Bundle to Prod
+        run: |
+          databricks bundle deploy --target prod
+
+      - name: Deployment Summary
+        run: |
+          echo "Deployment completed successfully"
+          echo "Bundle: cargo_fleet_management"
+          echo "Target: prod"
+          echo "Workspace: ${{ secrets.DATABRICKS_WORKSPACE }}"

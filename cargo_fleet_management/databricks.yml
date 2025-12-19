@@ -1,0 +1,59 @@
+# Databricks Asset Bundle definition
+bundle:
+  name: cargo_fleet_management
+  uuid: 8bf55fb1-5373-439f-8a2f-e8760e77b166
+
+include:
+  - resources/*.yml
+  - resources/*/*.yml
+
+############################
+# Global Variables
+############################
+variables:
+  catalog_name:
+    description: "Unity Catalog name for the environment"
+
+  schema_name:
+    description: "Default schema name"
+
+  warehouse_id:
+    description: "SQL Warehouse ID (optional)"
+    default: ""
+
+############################
+# Deployment Targets
+############################
+targets:
+  ##########################
+  # DEV (UI-driven)
+  ##########################
+  dev:
+    mode: development
+    default: true
+
+    workspace:
+      host: https://dbc-DEV-WORKSPACE.cloud.databricks.com
+
+    variables:
+      catalog_name: cargo_fleet_dev
+
+    presets:
+      artifacts_dynamic_version: true
+
+  ##########################
+  # PROD (CI/CD only)
+  ##########################
+  prod:
+    mode: production
+
+    workspace:
+      host: https://dbc-PROD-WORKSPACE.cloud.databricks.com
+      root_path: /Workspace/Shared/.bundle/${bundle.name}/${bundle.target}
+
+    variables:
+      catalog_name: cargo_fleet_prod
+
+    permissions:
+      - user_name: subbuthiagu786@gmail.com
+        level: CAN_MANAGE
