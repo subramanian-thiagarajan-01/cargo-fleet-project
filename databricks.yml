@@ -14,13 +14,6 @@ variables:
   catalog_name:
     description: "Unity Catalog name for the environment"
 
-  schema_name:
-    description: "Default schema name"
-
-  warehouse_id:
-    description: "SQL Warehouse ID (optional)"
-    default: ""
-
 ############################
 # Deployment Targets
 ############################
